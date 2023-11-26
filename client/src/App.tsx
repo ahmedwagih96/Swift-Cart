@@ -1,7 +1,18 @@
+import useScrollToTop from "./hooks/useScrollToTop";
+import { Routes, Route } from "react-router-dom";
+import { Home, ItemDetails, Checkout, Confirmation } from "./pages";
 function App() {
+  useScrollToTop();
   return (
-   <div></div>
-  )
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="item/:itemId" element={<ItemDetails />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="checkout/success" element={<Confirmation />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
