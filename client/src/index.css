@@ -45,3 +45,15 @@ a {
   z-index: 2;
 }
 /* END HEADER */
+
+/* START FOOTER */
+.footer__container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 30px;
+  column-gap: "clamp(20px, 30px, 40px";
+}
+/* END FOOTER */
