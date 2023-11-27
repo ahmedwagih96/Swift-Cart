@@ -13,17 +13,22 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
-const addItemToCart = (cart: ItemType[], item: ItemType) => {
+const addItemToCart = (
+  cart: ItemType[],
+  { item, count }: { item: ItemType; count: number }
+) => {
   let isItemExistInCart = false;
   cart.forEach((cartItem) => {
     if (cartItem._id === item._id) {
-      if (cartItem.count) cartItem.count++;
+      if (cartItem.count) cartItem.count += count;
       isItemExistInCart = true;
     }
-    if (!isItemExistInCart) {
-      cart.push({ ...item, count: 1 });
-    }
   });
+
+  if (!isItemExistInCart) {
+    cart.push({ ...item, count });
+  }
+
   return cart;
 };
 
@@ -35,7 +40,10 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<ItemType>) => {
+    addToCart: (
+      state,
+      action: PayloadAction<{ item: ItemType; count: number }>
+    ) => {
       state.cart = addItemToCart(state.cart, action.payload);
       state.totalPrice = calculateTotalPrice(state.cart);
     },

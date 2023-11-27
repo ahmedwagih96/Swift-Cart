@@ -8,7 +8,7 @@ import { addToCart } from "../redux/features/cartSlice";
 import { Link } from "react-router-dom";
 import { ItemType } from "../types/mongoTypes";
 
-const Item = ({ item, width }: { item: ItemType; width: number }) => {
+const Item = ({ item, width }: { item: ItemType; width?: number }) => {
   const dispatch = useDispatch();
   const [count, setCount] = useState<number>(1);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const Item = ({ item, width }: { item: ItemType; width: number }) => {
             </div>
             <Button
               onClick={() => {
-                dispatch(addToCart(item));
+                dispatch(addToCart({ item, count }));
               }}
               sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >

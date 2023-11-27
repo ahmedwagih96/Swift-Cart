@@ -41,7 +41,7 @@ function CartItem({ item }: { item: ItemType }) {
               <IconButton onClick={() => dispatch(decreaseCount(item._id))}>
                 <RemoveIcon />
               </IconButton>
-              <Typography>{item.price}</Typography>
+              <Typography>{item.count}</Typography>
               <IconButton onClick={() => dispatch(increaseCount(item._id))}>
                 <AddIcon />
               </IconButton>

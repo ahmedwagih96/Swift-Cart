@@ -8,7 +8,7 @@ function Header() {
       <div className="header__container">
         <Link to="/">
           <div style={{ color: shades.secondary[500], cursor: "pointer" }}>
-            Swift Card
+            Swift Cart
           </div>
         </Link>
         <Navbar />

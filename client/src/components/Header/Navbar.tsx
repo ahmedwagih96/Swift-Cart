@@ -9,7 +9,9 @@ import { setIsCartOpen } from "../../redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 function Navbar() {
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((state) => state.cartSlice);
+  const { cart, totalPrice } = useAppSelector((state) => state.cartSlice);
+  console.log(cart);
+  console.log(totalPrice)
   return (
     <nav className="header__nav">
       <IconButton sx={{ color: "black" }}>
