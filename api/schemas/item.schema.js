@@ -24,7 +24,7 @@ const ItemSchema = new mongoose.Schema(
             enum: ['newArrivals', 'bestSellers', 'topRated']
         },
         image: {
-            type: Array,
+            type: String,
             required: true,
         },
     },

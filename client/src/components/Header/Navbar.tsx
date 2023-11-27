@@ -5,7 +5,11 @@ import {
   MenuOutlined,
   SearchOutlined,
 } from "@mui/icons-material";
+import { setIsCartOpen } from "../../redux/features/cartSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 function Navbar() {
+  const dispatch = useAppDispatch();
+  const { cart } = useAppSelector((state) => state.cartSlice);
   return (
     <nav className="header__nav">
       <IconButton sx={{ color: "black" }}>
@@ -16,6 +20,8 @@ function Navbar() {
       </IconButton>
       <Badge
         color="secondary"
+        badgeContent={cart.length}
+        invisible={cart.length === 0}
         sx={{
           "& .MuiBadge-badge": {
             right: 5,
@@ -26,7 +32,10 @@ function Navbar() {
           },
         }}
       >
-        <IconButton sx={{ color: "black" }}>
+        <IconButton
+          sx={{ color: "black" }}
+          onClick={() => dispatch(setIsCartOpen())}
+        >
           <ShoppingBagOutlined />
         </IconButton>
       </Badge>
