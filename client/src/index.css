@@ -93,3 +93,19 @@ a {
   margin: 20px 0px;
 }
 /* END CART MENU */
+
+/* START ITEM */
+.item__iconsContainer {
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+}
+
+.buttons__container {
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  width: 100%;
+  padding: 0px 5%;
+}
+/* END ITEM */
