@@ -10,6 +10,10 @@ import CartItem from "./CartMenu/CartItem";
 import MainCarousel from "./Home/Carousel";
 import ShoppingList from "./Home/ShoppingList";
 import Subscribe from "./Home/Subscribe";
+// ITEM DETAILS PAGE
+import ItemDescriptions from "./ItemDetails/ItemDescriptions";
+import ItemInformation from "./ItemDetails/ItemInformation";
+import RelatedItems from "./ItemDetails/RelatedItems";
 // REUSABLE COMPONENTS
 import Item from "./Item";
 export {
@@ -22,4 +26,7 @@ export {
   MainCarousel,
   ShoppingList,
   Subscribe,
+  ItemDescriptions,
+  ItemInformation,
+  RelatedItems,
 };
