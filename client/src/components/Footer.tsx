@@ -19,11 +19,7 @@ function Footer() {
           >
             Swift Cart
           </Typography>
-          <div>
-            Redefining the pace of online shopping. Your destination for curated
-            products delivered with speed and efficiency. Join us on the fast
-            lane of digital retail therapy.
-          </div>
+          <div>Redefining the pace of online shopping.</div>
         </div>
 
         <div>
@@ -52,7 +48,7 @@ function Footer() {
           </Typography>
           <Typography mb="30px">50 north Cairo, Egypt</Typography>
           <Typography mb="30px" sx={{ wordWrap: "break-word" }}>
-            Email: mredwardroh@gmail.com
+            Email: swiftcart@email.com
           </Typography>
           <Typography mb="30px">(222)333-4444</Typography>
         </div>

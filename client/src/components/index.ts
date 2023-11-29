@@ -14,6 +14,10 @@ import Subscribe from "./Home/Subscribe";
 import ItemDescriptions from "./ItemDetails/ItemDescriptions";
 import ItemInformation from "./ItemDetails/ItemInformation";
 import RelatedItems from "./ItemDetails/RelatedItems";
+// CHECK OUT PAGE
+import Payment from "./Checkout/Payment";
+import Shipping from "./Checkout/Shipping";
+import AddressForm from "./Checkout/AddressForm";
 // REUSABLE COMPONENTS
 import Item from "./Item";
 export {
@@ -29,4 +33,7 @@ export {
   ItemDescriptions,
   ItemInformation,
   RelatedItems,
+  Payment,
+  Shipping,
+  AddressForm
 };

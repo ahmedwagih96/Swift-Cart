@@ -1,25 +1,12 @@
 import { Badge, IconButton } from "@mui/material";
-import {
-  PersonOutline,
-  ShoppingBagOutlined,
-  MenuOutlined,
-  SearchOutlined,
-} from "@mui/icons-material";
+import { PersonOutline, ShoppingBagOutlined } from "@mui/icons-material";
 import { setIsCartOpen } from "../../redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 function Navbar() {
   const dispatch = useAppDispatch();
-  const { cart, totalPrice } = useAppSelector((state) => state.cartSlice);
-  console.log(cart);
-  console.log(totalPrice)
+  const { cart } = useAppSelector((state) => state.cartSlice);
   return (
     <nav className="header__nav">
-      <IconButton sx={{ color: "black" }}>
-        <SearchOutlined />
-      </IconButton>
-      <IconButton sx={{ color: "black" }}>
-        <PersonOutline />
-      </IconButton>
       <Badge
         color="secondary"
         badgeContent={cart.length}
@@ -42,7 +29,7 @@ function Navbar() {
         </IconButton>
       </Badge>
       <IconButton sx={{ color: "black" }}>
-        <MenuOutlined />
+        <PersonOutline />
       </IconButton>
     </nav>
   );
