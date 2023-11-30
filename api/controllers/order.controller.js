@@ -30,8 +30,8 @@ const makeOrder = async (req, res) => {
         payment_method_types: ['card'],
         mode: 'payment',
         line_items: items,
-        success_url: `${process.env.BASE_URL}/checkout/success`,
-        cancel_url: `${process.env.BASE_URL}/checkout/failure`
+        success_url: `${process.env.CLIENT_DOMAIN}/checkout/success`,
+        cancel_url: `${process.env.CLIENT_DOMAIN}/checkout/failure`
     })
         .then(session => {
             res.status(200).json({ id: session.id });

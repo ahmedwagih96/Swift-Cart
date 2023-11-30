@@ -1,4 +1,4 @@
-import { Error, ItemDescriptions, ItemInformation } from "../components";
+import { Error, ItemDescriptions, ItemInformation, Seo } from "../components";
 import { useFetchItemByIdQuery } from "../redux/services/itemsApi";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -15,6 +15,7 @@ const ItemDetails = () => {
   }
   return (
     <main style={{ width: "80%", margin: "40px auto" }}>
+      <Seo title={item?.name || ""} canonicalUrl={`/item/${item?._id}`} />
       {isLoading ? (
         <div
           style={{
@@ -35,7 +36,6 @@ const ItemDetails = () => {
           <ItemInformation item={item} />
         </>
       ) : null}
-      
     </main>
   );
 };

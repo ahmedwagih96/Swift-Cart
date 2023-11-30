@@ -3,6 +3,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useEffect } from "react";
 import { resetCart } from "../redux/features/cartSlice";
 import { useAppDispatch } from "../redux/hooks";
+import { Seo } from "../components";
 const Confirmation = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -10,6 +11,7 @@ const Confirmation = () => {
   }, []);
   return (
     <main style={{ margin: "90px auto", width: "80%", height: "50vh" }}>
+      <Seo title="Confirmation" />
       <Alert severity="success">
         <AlertTitle>Success</AlertTitle>
         You have successfully made an Order —{" "}

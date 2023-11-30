@@ -19,6 +19,7 @@ import AddressForm from "./Checkout/AddressForm";
 // REUSABLE COMPONENTS
 import Item from "./Item";
 import Error from "./Error";
+import Seo from "./Seo";
 export {
   Header,
   Navbar,
@@ -34,4 +35,5 @@ export {
   Shipping,
   AddressForm,
   Error,
+  Seo
 };

@@ -1,7 +1,7 @@
 import { Button, Stepper, Step, StepLabel } from "@mui/material";
 import { Formik } from "formik";
 import { shades } from "../theme";
-import { Payment, Shipping } from "../components";
+import { Payment, Shipping, Seo } from "../components";
 import useStripePayment from "../hooks/useStripePayment";
 import { initialValues } from "../constants/checkOutForm";
 import { checkoutSchema } from "../constants/checkOutSchema";
@@ -16,6 +16,7 @@ const Checkout = () => {
 
   return (
     <main style={{ width: "80%", margin: "40px auto" }}>
+      <Seo title="Checkout" canonicalUrl="/checkout" />
       <Stepper activeStep={activeStep} sx={{ m: "20px 0" }}>
         <Step>
           <StepLabel>Billing</StepLabel>
