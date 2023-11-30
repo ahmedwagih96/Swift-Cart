@@ -9,7 +9,7 @@ import { setIsCartOpen } from "../../redux/features/cartSlice";
 const CartMenu = () => {
   const dispatch = useAppDispatch();
   const { isCartOpen, cart, totalPrice } = useAppSelector(
-    (state) => state.cartSlice
+    (state) => state.reducers.cartSlice
   );
   return (
     <div
@@ -20,7 +20,7 @@ const CartMenu = () => {
         <div style={{ padding: "30px", overflow: "auto", height: "100%" }}>
           {/* HEADER */}
           <div className="flexbox" style={{ marginBottom: "15px" }}>
-            <Typography variant="h3">SHOPPING BAG {cart.length} </Typography>
+            <Typography variant="h3">SHOPPING BAG </Typography>
             <IconButton onClick={() => dispatch(setIsCartOpen())}>
               <CloseIcon />
             </IconButton>
@@ -37,17 +37,21 @@ const CartMenu = () => {
               <Typography fontWeight="bold">SUBTOTAL</Typography>
               <Typography fontWeight="bold">${totalPrice}</Typography>
             </div>
-            <Link to="/checkout">
-              <Button
-                onClick={() => dispatch(setIsCartOpen())}
-                sx={{
-                  backgroundColor: shades.primary[400],
-                }}
-                className="cartMenu__button"
-              >
-                CHECKOUT
-              </Button>
-            </Link>
+            {cart.length ? (
+              <Link to="/checkout">
+                <Button
+                  onClick={() => {
+                    dispatch(setIsCartOpen());
+                  }}
+                  sx={{
+                    backgroundColor: shades.neutral[100],
+                  }}
+                  className="cartMenu__button"
+                >
+                  CHECKOUT
+                </Button>
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

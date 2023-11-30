@@ -1,40 +1,48 @@
 import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Item, Error } from "../";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { Item } from "../";
 import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { dummyItems } from "../../dummyData";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useFetchAllItemsQuery } from "../../redux/services/itemsApi";
 const ShoppingList = () => {
-  const [value, setValue] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [tab, setTab] = useState<string>(searchParams.get("category") || "");
   const breakPoint = useMediaQuery("(min-width:600px)");
+  const {
+    data: items,
+    error,
+    isLoading,
+    refetch,
+  } = useFetchAllItemsQuery({ category: searchParams.get("category") || "" });
 
   const handleChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: string
   ) => {
-    setValue(newValue);
+    setTab(newValue);
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
+    newValue ? current.set("category", newValue) : current.delete("category");
+    const query = current.toString();
+    navigate(`/?${query}`);
   };
 
-  const topRatedItems = dummyItems.filter(
-    (item) => item.category === "topRated"
-  );
-  const newArrivalsItems = dummyItems.filter(
-    (item) => item.category === "newArrivals"
-  );
-  const bestSellersItems = dummyItems.filter(
-    (item) => item.category === "bestSellers"
-  );
+  if (error) {
+    return <Error refetch={refetch} />;
+  }
 
   return (
-    <div style={{ width: "80%", margin: "80px auto" }}>
+    <div style={{ width: "80%", margin: "40px auto" }}>
       <Typography variant="h3" textAlign="center">
         Our Featured <b>Products</b>
       </Typography>
       <Tabs
         textColor="primary"
         indicatorColor="primary"
-        value={value}
+        value={tab}
         onChange={handleChange}
         centered
         TabIndicatorProps={{ sx: { display: breakPoint ? "block" : "none" } }}
@@ -50,19 +58,23 @@ const ShoppingList = () => {
         <Tab label="BEST SELLERS" value="bestSellers" />
         <Tab label="TOP RATED" value="topRated" />
       </Tabs>
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "150px",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress value={60} />
+        </div>
+      ) : null}
+
       <div className="items__container">
-        {value === ""
-          ? dummyItems.map((item) => <Item item={item} key={item._id} />)
-          : null}
-        {value === "newArrivals"
-          ? newArrivalsItems.map((item) => <Item item={item} key={item._id} />)
-          : null}
-        {value === "bestSellers"
-          ? bestSellersItems.map((item) => <Item item={item} key={item._id} />)
-          : null}
-        {value === "topRated"
-          ? topRatedItems.map((item) => <Item item={item} key={item._id} />)
-          : null}
+        {items?.map((item) => (
+          <Item item={item} key={item._id} />
+        ))}
       </div>
     </div>
   );

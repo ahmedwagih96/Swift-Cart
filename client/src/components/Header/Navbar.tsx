@@ -4,7 +4,7 @@ import { setIsCartOpen } from "../../redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 function Navbar() {
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((state) => state.cartSlice);
+  const { cart } = useAppSelector((state) => state.reducers.cartSlice);
   return (
     <nav className="header__nav">
       <Badge

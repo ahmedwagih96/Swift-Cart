@@ -15,7 +15,7 @@ const Checkout = () => {
   } = useStripePayment();
 
   return (
-    <div style={{ width: "80%", margin: "100px auto" }}>
+    <main style={{ width: "80%", margin: "40px auto" }}>
       <Stepper activeStep={activeStep} sx={{ m: "20px 0" }}>
         <Step>
           <StepLabel>Billing</StepLabel>
@@ -88,7 +88,7 @@ const Checkout = () => {
                 {isFirstStep ? (
                   <Button
                     fullWidth
-                    type="button"
+                    type="submit"
                     color="primary"
                     variant="contained"
                     sx={{
@@ -98,7 +98,6 @@ const Checkout = () => {
                       borderRadius: 0,
                       padding: "15px 40px",
                     }}
-                    onClick={() => setActiveStep(activeStep + 1)}
                   >
                     Next
                   </Button>
@@ -125,7 +124,7 @@ const Checkout = () => {
           )}
         </Formik>
       </div>
-    </div>
+    </main>
   );
 };
 

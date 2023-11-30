@@ -9,7 +9,11 @@ const { cloudinaryUploadImage } = require('../utils/cloudinary');
     * @access public
 -----------------------------------------------------*/
 const getAllItems = async (req, res) => {
-    const items = await Item.find({})
+    const queries = {}
+    if (req.query.category) {
+        queries.category = req.query.category
+    }
+    const items = await Item.find(queries)
     res.status(200).json(items)
 }
 

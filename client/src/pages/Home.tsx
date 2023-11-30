@@ -1,12 +1,11 @@
-import { MainCarousel, ShoppingList, Subscribe } from "../components";
+import { ShoppingList, Subscribe } from "../components";
 
 function Home() {
   return (
-    <div>
-      <MainCarousel />
+    <main>
       <ShoppingList />
       <Subscribe />
-    </div>
+    </main>
   );
 }
 

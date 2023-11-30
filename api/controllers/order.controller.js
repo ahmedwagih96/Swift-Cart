@@ -1,6 +1,11 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { Item } = require('../models/item.model.js')
-
+/**-----------------------------------------------------
+    * @desc Make Payment
+    * @route /api/api/order
+    * @method POST
+    * @access public
+-----------------------------------------------------*/
 const makeOrder = async (req, res) => {
     // retrieve item information 
     const items = await Promise.all(req.body.products.map(async ({ count, _id }) => {
@@ -26,7 +31,7 @@ const makeOrder = async (req, res) => {
         mode: 'payment',
         line_items: items,
         success_url: `${process.env.BASE_URL}/checkout/success`,
-        cancel_url: process.env.BASE_URL
+        cancel_url: `${process.env.BASE_URL}/checkout/failure`
     })
         .then(session => {
             res.status(200).json({ id: session.id });

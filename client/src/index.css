@@ -17,6 +17,10 @@ a {
   color: inherit;
 }
 
+main {
+  min-height: 60vh;
+}
+
 .flexbox {
   display: flex;
   justify-content: space-between;
@@ -28,7 +32,6 @@ a {
   height: 60px;
   background-color: rgba(255, 255, 255, 0.95);
   color: black;
-  position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
@@ -60,7 +63,26 @@ a {
   justify-content: space-between;
   flex-wrap: wrap;
   row-gap: 30px;
-  column-gap: "clamp(20px, 30px, 40px";
+  gap: 20px;
+  margin-top: auto;
+}
+
+.footer__container > div {
+  gap: 20px;
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer__container > div > div {
+  flex: 1;
+}
+.footer__link {
+  cursor: pointer;
+}
+.footer__link:hover {
+  text-decoration: underline;
 }
 /* END FOOTER */
 
@@ -86,12 +108,18 @@ a {
 }
 
 .cartMenu__button {
-  color: white;
   border-radius: 0px;
   min-width: 100%;
   padding: 20px 40px;
   margin: 20px 0px;
 }
+.cartMenu__button > a {
+  transition: 0.3s;
+}
+.cartMenu__button:hover {
+  font-weight: bold;
+}
+
 /* END CART MENU */
 
 /* START ITEM */
@@ -131,6 +159,6 @@ a {
   display: flex;
   align-items: center;
   width: 75%;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 /* END HOME PAGE */

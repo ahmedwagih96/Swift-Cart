@@ -63,7 +63,6 @@ export const cartSlice = createSlice({
       });
       state.totalPrice = calculateTotalPrice(state.cart);
     },
-
     decreaseCount: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.map((item) => {
         if (item._id === action.payload && item.count && item.count > 1) {
@@ -73,6 +72,9 @@ export const cartSlice = createSlice({
       });
       state.totalPrice = calculateTotalPrice(state.cart);
     },
+    resetCart : (state)=>{
+      state.cart = []
+    }
   },
 });
 
@@ -82,6 +84,7 @@ export const {
   removeFromCart,
   increaseCount,
   decreaseCount,
+  resetCart
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

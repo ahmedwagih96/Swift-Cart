@@ -3,19 +3,18 @@ import { useAppSelector } from "../redux/hooks";
 import { loadStripe } from "@stripe/stripe-js";
 import { FormValues } from "../types/typing";
 import { FormikHelpers } from "formik";
-
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 function useStripePayment() {
-  const stripePromise = loadStripe(
-    "pk_test_51OHnOrGEAsqvHIzIATZQtNZ8r9B2IF1GQDfyzPjRJQJ6fhaGtzCqX8SeLeD9NjUUyjfTEI3kTTOk1cMHjM9y910200IJJ0IRi9"
-  );
-  const { cart } = useAppSelector((state) => state.cartSlice);
+  const { cart } = useAppSelector((state) => state.reducers.cartSlice);
   const [activeStep, setActiveStep] = useState<number>(0);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
+
   const handleFormSubmit = async (
     values: FormValues,
     actions: FormikHelpers<FormValues>
   ) => {
+    if (isFirstStep) setActiveStep(activeStep + 1);
     if (isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue("shippingAddress", {
         ...values.billingAddress,
@@ -43,11 +42,14 @@ function useStripePayment() {
       })),
     };
 
-    const response = await fetch("http://localhost:8000/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/api/orders`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      }
+    );
     const session = await response.json();
     await stripe.redirectToCheckout({
       sessionId: session.id,
