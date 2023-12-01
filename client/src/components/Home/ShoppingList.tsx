@@ -20,7 +20,7 @@ const ShoppingList = () => {
   } = useFetchAllItemsQuery({ category: searchParams.get("category") || "" });
 
   const handleChange = (
-    event: React.SyntheticEvent<Element, Event>,
+    _event: React.SyntheticEvent<Element, Event>,
     newValue: string
   ) => {
     setTab(newValue);

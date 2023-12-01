@@ -5,7 +5,7 @@ import { ItemType } from "../../types/mongoTypes";
 function ItemInformation({ item }: { item: ItemType }) {
   const [value, setValue] = useState<string>("description");
   const handleChange = (
-    event: React.SyntheticEvent<Element>,
+    _event: React.SyntheticEvent<Element>,
     newValue: string
   ) => {
     setValue(newValue);
