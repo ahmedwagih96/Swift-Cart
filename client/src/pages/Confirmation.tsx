@@ -10,7 +10,7 @@ const Confirmation = () => {
     dispatch(resetCart());
   }, []);
   return (
-    <main style={{ margin: "90px auto", width: "80%", height: "50vh" }}>
+    <main style={{ margin: "90px auto", width: "80%" }}>
       <Seo title="Confirmation" />
       <Alert severity="success">
         <AlertTitle>Success</AlertTitle>

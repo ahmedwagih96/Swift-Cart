@@ -6,7 +6,7 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const Confirmation = lazy(() => import("./pages/Confirmation"));
 const ItemDetails = lazy(() => import("./pages/ItemDetails"));
 const Cancellation = lazy(() => import("./pages/Cancellation"));
-import { CartMenu, Footer, Header } from "./components";
+import { CartMenu, Footer, Header, LoadingSpinner } from "./components";
 import { useAppSelector } from "./redux/hooks";
 function App() {
   useScrollToTop();
@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <Suspense>
+      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="item/:itemId" element={<ItemDetails />} />

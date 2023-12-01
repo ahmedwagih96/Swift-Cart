@@ -4,7 +4,7 @@ import { Seo } from "../components";
 
 const Cancellation = () => {
   return (
-    <main style={{ margin: "90px auto", width: "80%", height: "50vh" }}>
+    <main style={{ margin: "90px auto", width: "80%" }}>
       <Seo title="Declined Payment" />
       <Alert severity="error">
         <AlertTitle>Payment Declined</AlertTitle>

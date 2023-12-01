@@ -5,7 +5,7 @@ import { shades } from "../theme";
 
 const Error = ({ refetch }: { refetch: () => void }) => {
   return (
-    <div style={{ margin: "90px auto", width: "80%", height: "50vh" }}>
+    <div style={{ margin: "90px auto", width: "80%" }}>
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
         Something Went Wrong
@@ -14,8 +14,7 @@ const Error = ({ refetch }: { refetch: () => void }) => {
         sx={{
           marginTop: "20px",
           backgroundColor: shades.neutral[100],
-          fontSize: '16px'
-          
+          fontSize: "16px",
         }}
         onClick={() => {
           refetch();

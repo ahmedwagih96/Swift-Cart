@@ -20,6 +20,7 @@ import AddressForm from "./Checkout/AddressForm";
 import Item from "./Item";
 import Error from "./Error";
 import Seo from "./Seo";
+import LoadingSpinner from "./LoadingSpinner";
 export {
   Header,
   Navbar,
@@ -35,5 +36,6 @@ export {
   Shipping,
   AddressForm,
   Error,
-  Seo
+  Seo,
+  LoadingSpinner
 };
