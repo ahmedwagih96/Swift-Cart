@@ -1,10 +1,16 @@
-import { Button, Stepper, Step, StepLabel } from "@mui/material";
+import {
+  Button,
+  Stepper,
+  Step,
+  StepLabel,
+  CircularProgress,
+} from "@mui/material";
 import { Formik } from "formik";
 import { shades } from "../theme";
-import { Payment, Shipping, Seo } from "../components";
+import { Payment, Shipping, Seo, ErrorToast } from "../components";
 import useStripePayment from "../hooks/useStripePayment";
-import { initialValues } from "../constants/checkOutForm";
-import { checkoutSchema } from "../constants/checkOutSchema";
+import { initialCheckoutValues } from "../constants/initialValues";
+import { checkoutSchema } from "../constants/schemas";
 const Checkout = () => {
   const {
     handleFormSubmit,
@@ -12,10 +18,19 @@ const Checkout = () => {
     activeStep,
     isFirstStep,
     isSecondStep,
+    loading,
+    error,
+    errorMessage,
+    setError,
   } = useStripePayment();
 
   return (
     <main style={{ width: "80%", margin: "40px auto" }}>
+      <ErrorToast
+        error={error}
+        errorMessage={errorMessage}
+        setError={setError}
+      />
       <Seo title="Checkout" canonicalUrl="/checkout" />
       <Stepper activeStep={activeStep} sx={{ m: "20px 0" }}>
         <Step>
@@ -28,7 +43,7 @@ const Checkout = () => {
       <div>
         <Formik
           onSubmit={handleFormSubmit}
-          initialValues={initialValues}
+          initialValues={initialCheckoutValues}
           validationSchema={checkoutSchema[activeStep]}
         >
           {({
@@ -109,6 +124,7 @@ const Checkout = () => {
                     fullWidth
                     color="primary"
                     variant="contained"
+                    disabled={loading}
                     sx={{
                       backgroundColor: shades.primary[200],
                       boxShadow: "none",
@@ -117,7 +133,7 @@ const Checkout = () => {
                       padding: "15px 40px",
                     }}
                   >
-                    Place Order
+                    {loading ? <CircularProgress size={22}/> : "Place Order"}
                   </Button>
                 ) : null}
               </div>

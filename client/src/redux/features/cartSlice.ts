@@ -72,9 +72,10 @@ export const cartSlice = createSlice({
       });
       state.totalPrice = calculateTotalPrice(state.cart);
     },
-    resetCart : (state)=>{
-      state.cart = []
-    }
+    resetCart: (state) => {
+      state.cart = [];
+      state.totalPrice = 0;
+    },
   },
 });
 
@@ -84,7 +85,7 @@ export const {
   removeFromCart,
   increaseCount,
   decreaseCount,
-  resetCart
+  resetCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

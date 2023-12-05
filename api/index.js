@@ -7,9 +7,20 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const express = require('express');
 const { errorHandler } = require('./middleware/error.js');
+const cookieParser = require('cookie-parser');
 const app = express();
+
+const corsOptions = {
+    origin: [process.env.CLIENT_DOMAIN, 'https://api.stripe.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+app.use(cookieParser());
+
 app.use(express.json());
-app.use(cors());
 
 // Prevent XSS(Cross Site Scripting) Attacks
 app.use(xss());
@@ -17,8 +28,9 @@ app.use(xss());
 app.use(hpp());
 
 // Routes
-app.use('/api/orders', require('./routes/order.route.js'))
-app.use('/api/items', require('./routes/item.route.js'))
+app.use('/api/orders', require('./routes/order.route.js'));
+app.use('/api/items', require('./routes/item.route.js'));
+app.use('/api/auth', require('./routes/auth.route.js'));
 
 const staticPath = path.join(__dirname, '../client/dist');
 app.use(express.static(staticPath));

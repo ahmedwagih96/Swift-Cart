@@ -45,7 +45,22 @@ export const checkoutSchema = [
     }),
   }),
   yup.object().shape({
-    email: yup.string().required("required"),
+    email: yup.string().email("Invalid email address").required("required"),
     phoneNumber: yup.string().required("required"),
   }),
 ];
+
+export const loginSchema = yup.object().shape({
+  email: yup.string().email("Invalid email address").required("required"),
+  password: yup.string().required("required"),
+});
+
+export const registerSchema = yup.object().shape({
+  email: yup.string().email("Invalid email address").required("required"),
+  username: yup.string().required("required"),
+  password: yup.string().required("required"),
+  confirmPassword: yup
+    .string()
+    .required("required")
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
+});

@@ -7,6 +7,9 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 function useStripePayment() {
   const { cart } = useAppSelector((state) => state.reducers.cartSlice);
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
 
@@ -42,18 +45,36 @@ function useStripePayment() {
       })),
     };
 
-    const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/api/orders`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
+    try {
+      setLoading(true);
+      setError(false);
+      setErrorMessage("");
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/orders`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+        }
+      );
+      const session = await response.json();
+      setLoading(false);
+      if (session.message) {
+        setError(true);
+        setErrorMessage(session.message);
+        return;
       }
-    );
-    const session = await response.json();
-    await stripe.redirectToCheckout({
-      sessionId: session.id,
-    });
+      await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+        setError(true);
+      }
+    }
   }
   return {
     handleFormSubmit,
@@ -61,6 +82,10 @@ function useStripePayment() {
     activeStep,
     isFirstStep,
     isSecondStep,
+    loading,
+    error,
+    errorMessage,
+    setError,
   };
 }
 

@@ -1,6 +1,6 @@
-import { FormValues } from "../types/typing";
+import { FormValues, LoginValues, RegisterValues } from "../types/typing";
 
-export const initialValues: FormValues = {
+export const initialCheckoutValues: FormValues = {
   billingAddress: {
     firstName: "",
     lastName: "",
@@ -24,4 +24,16 @@ export const initialValues: FormValues = {
   },
   email: "",
   phoneNumber: "",
+};
+
+export const initialLoginValues: LoginValues = {
+  email: "",
+  password: "",
+};
+
+export const initialRegisterValues: RegisterValues = {
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
 };

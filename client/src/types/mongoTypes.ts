@@ -12,5 +12,24 @@ export interface ItemType extends MongoType {
   price: number;
   category: string;
   image: string;
-  count? : number
+  count?: number;
+}
+
+export interface UserType extends MongoType {
+  username: string;
+  email: string;
+  password: string;
+  avatar: string;
+  orders: OrderType[];
+}
+
+export interface OrderType extends MongoType {
+  stripeSessionId: string;
+  products: Products[];
+  user: UserType;
+}
+
+interface Products {
+  item: ItemType;
+  count: number;
 }

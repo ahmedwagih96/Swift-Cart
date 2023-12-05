@@ -1,6 +1,7 @@
 // HEADER
 import Header from "./Header";
 import Navbar from "./Header/Navbar";
+import User from "./Header/User";
 // FOOTER
 import Footer from "./Footer";
 // CART MENU
@@ -21,9 +22,11 @@ import Item from "./Item";
 import Error from "./Error";
 import Seo from "./Seo";
 import LoadingSpinner from "./LoadingSpinner";
+import ErrorToast from "./ErrorToast";
 export {
   Header,
   Navbar,
+  User,
   Footer,
   CartMenu,
   CartItem,
@@ -37,5 +40,6 @@ export {
   AddressForm,
   Error,
   Seo,
-  LoadingSpinner
+  LoadingSpinner,
+  ErrorToast
 };

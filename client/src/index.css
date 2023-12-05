@@ -52,7 +52,7 @@ a {
 .header__nav {
   display: flex;
   justify-content: space-between;
-  column-gap: 20px;
+  column-gap: 10px;
   z-index: 2;
 }
 /* END HEADER */
@@ -96,7 +96,7 @@ a {
   height: 100%;
   left: 0;
   top: 0;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .cartMenu__container {

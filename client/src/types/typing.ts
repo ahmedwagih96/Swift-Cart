@@ -19,3 +19,13 @@ export interface BillingAddress {
 export interface ShippingAddress extends BillingAddress {
   isSameAddress: boolean;
 }
+
+export interface LoginValues {
+  email: string;
+  password: string;
+}
+
+export interface RegisterValues extends LoginValues {
+  username: string;
+  confirmPassword: string;
+}

@@ -8,15 +8,16 @@ import { setIsCartOpen } from "../../redux/features/cartSlice";
 
 const CartMenu = () => {
   const dispatch = useAppDispatch();
-  const { isCartOpen, cart, totalPrice } = useAppSelector(
-    (state) => state.reducers.cartSlice
-  );
+  const {
+    cartSlice: { isCartOpen, cart, totalPrice },
+    userSlice: { user },
+  } = useAppSelector((state) => state.reducers);
   return (
     <div
       className="cartMenu"
       style={{ display: isCartOpen ? "block" : "none" }}
     >
-      <div className="cartMenu__container">
+      <div className='cartMenu__container'>
         <div style={{ padding: "30px", overflow: "auto", height: "100%" }}>
           {/* HEADER */}
           <div className="flexbox" style={{ marginBottom: "15px" }}>
@@ -38,7 +39,7 @@ const CartMenu = () => {
               <Typography fontWeight="bold">${totalPrice}</Typography>
             </div>
             {cart.length ? (
-              <Link to="/checkout">
+              <Link to={user ? "/checkout" : "/login"}>
                 <Button
                   onClick={() => {
                     dispatch(setIsCartOpen());
