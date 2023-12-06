@@ -8,6 +8,8 @@ const ItemDetails = lazy(() => import("./pages/ItemDetails"));
 const Declined = lazy(() => import("./pages/Declined"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const Orders = lazy(() => import("./pages/Orders"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 import { CartMenu, Footer, Header, LoadingSpinner } from "./components";
 import { useAppSelector } from "./redux/hooks";
 function App() {
@@ -42,6 +44,12 @@ function App() {
             path="/register"
             element={!user ? <Register /> : <Navigate to="/" />}
           />
+          <Route
+            path="/orders/:userId"
+            element={user ? <Orders /> : <Navigate to="/" />}
+          />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" />} />
         </Routes>
       </Suspense>
       <CartMenu />

@@ -8,6 +8,7 @@ import { LocalGroceryStoreOutlined, LogoutOutlined } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
 import useLogout from "../../hooks/useLogout";
 import { ErrorToast } from "..";
+import { Link } from "react-router-dom";
 export default function User() {
   const { user } = useAppSelector((state) => state.reducers.userSlice);
   const { error, signOutUser, setError } = useLogout();
@@ -68,12 +69,14 @@ export default function User() {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <LocalGroceryStoreOutlined fontSize="small" />
-            </ListItemIcon>
-            My Orders
-          </MenuItem>
+          <Link to={`/orders/${user?._id}`}>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <LocalGroceryStoreOutlined fontSize="small" />
+              </ListItemIcon>
+              My Orders
+            </MenuItem>
+          </Link>
           <MenuItem
             onClick={() => {
               handleClose();

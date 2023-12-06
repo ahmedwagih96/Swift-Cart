@@ -24,6 +24,10 @@ const OrderSchema = new mongoose.Schema(
             required: true,
             enum: ['pending', 'fulfilled', 'cancelled']
         },
+        totalPrice: {
+            type: Number,
+            required: true,
+        },
     },
     { timestamps: true }
 );

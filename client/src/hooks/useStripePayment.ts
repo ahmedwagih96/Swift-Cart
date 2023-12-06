@@ -7,7 +7,9 @@ import { FormikHelpers } from "formik";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 function useStripePayment() {
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((state) => state.reducers.cartSlice);
+  const { cart, totalPrice } = useAppSelector(
+    (state) => state.reducers.cartSlice
+  );
   const [activeStep, setActiveStep] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -41,6 +43,7 @@ function useStripePayment() {
         values.billingAddress.lastName,
       ].join(" "),
       email: values.email,
+      totalPrice,
       products: cart.map(({ _id, count }) => ({
         _id,
         count,

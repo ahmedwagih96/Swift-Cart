@@ -23,10 +23,5 @@ const UserSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 })
 
-// Populate Orders that belong to this user 
-UserSchema.virtual("orders", {
-    ref: "Order",
-    foreignField: "user",
-    localField: "_id"
-})
+
 module.exports = { UserSchema }

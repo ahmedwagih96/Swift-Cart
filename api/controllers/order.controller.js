@@ -54,7 +54,7 @@ const makeOrder = async (req, res) => {
         return res.status(400).json({ message: 'There was a problem making your payment' })
     })
     await Order.create({
-        products, stripeSessionId: session.id, user: req.user.id, status: 'pending'
+        products, stripeSessionId: session.id, user: req.user.id, status: 'pending', totalPrice: req.body.totalPrice
     })
     return res.status(200).json({ id: session.id });
 }
@@ -104,7 +104,19 @@ const handleStripeEvents = async (request, response) => {
 
     response.status(200).end();
 }
+/**-----------------------------------------------------
+    * @desc Get All Orders
+    * @route /api/api/orders
+    * @method GET
+    * @access private (only logged in user)
+-----------------------------------------------------*/
+const getAllOrders = async (req, res) => {
+    const orders = await Order.find({}).populate({
+        path: 'products.item',
+        model: 'Item',
+    });
+    res.status(200).json(orders)
+}
 
 
-
-module.exports = { makeOrder, handleStripeEvents }
+module.exports = { makeOrder, handleStripeEvents, getAllOrders }

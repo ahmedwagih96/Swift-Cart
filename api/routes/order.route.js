@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { makeOrder } = require('../controllers/order.controller.js');
-const { verifyToken } = require('../middleware/verifyToken.js');
+const { makeOrder, getAllOrders } = require('../controllers/order.controller.js');
+const { verifyToken, verifyTokenAndUser } = require('../middleware/verifyToken.js');
 
 router.post('/', verifyToken, makeOrder);
-
+router.get('/:userId', verifyTokenAndUser, getAllOrders)
 module.exports = router

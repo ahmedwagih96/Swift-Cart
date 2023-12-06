@@ -20,13 +20,14 @@ export interface UserType extends MongoType {
   email: string;
   password: string;
   avatar: string;
-  orders: OrderType[];
 }
 
 export interface OrderType extends MongoType {
   stripeSessionId: string;
   products: Products[];
   user: UserType;
+  status: string;
+  totalPrice: number;
 }
 
 interface Products {
