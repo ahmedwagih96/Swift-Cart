@@ -19,6 +19,11 @@ const OrderSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
+        status: {
+            type: String,
+            required: true,
+            enum: ['pending', 'fulfilled', 'cancelled']
+        },
     },
     { timestamps: true }
 );

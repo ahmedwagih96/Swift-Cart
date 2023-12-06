@@ -20,17 +20,19 @@ app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
-app.use(express.json());
 
 // Prevent XSS(Cross Site Scripting) Attacks
 app.use(xss());
 // Protect Http Param Pollution
 app.use(hpp());
 
+app.use('/api/stripe', require('./routes/stripe.route.js'));
+app.use(express.json());
 // Routes
 app.use('/api/orders', require('./routes/order.route.js'));
 app.use('/api/items', require('./routes/item.route.js'));
 app.use('/api/auth', require('./routes/auth.route.js'));
+app.use('/api/orderToken', require('./routes/orderToken.route.js'));
 
 const staticPath = path.join(__dirname, '../client/dist');
 app.use(express.static(staticPath));

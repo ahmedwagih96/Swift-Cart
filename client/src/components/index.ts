@@ -14,6 +14,8 @@ import Subscribe from "./Home/Subscribe";
 import ItemDescriptions from "./ItemDetails/ItemDescriptions";
 import ItemInformation from "./ItemDetails/ItemInformation";
 // CHECK OUT PAGE
+import CheckoutContent from "./Checkout/CheckoutContent";
+import Stepper from "./Checkout/Stepper";
 import Payment from "./Checkout/Payment";
 import Shipping from "./Checkout/Shipping";
 import AddressForm from "./Checkout/AddressForm";
@@ -35,6 +37,8 @@ export {
   Subscribe,
   ItemDescriptions,
   ItemInformation,
+  CheckoutContent,
+  Stepper,
   Payment,
   Shipping,
   AddressForm,

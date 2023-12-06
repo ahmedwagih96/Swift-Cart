@@ -45,11 +45,11 @@ export const cartSlice = createSlice({
       action: PayloadAction<{ item: ItemType; count: number }>
     ) => {
       state.cart = addItemToCart(state.cart, action.payload);
-      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalPrice = Number(calculateTotalPrice(state.cart).toFixed(2));
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.filter((item) => item._id !== action.payload);
-      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalPrice = Number(calculateTotalPrice(state.cart).toFixed(2));
     },
     setIsCartOpen: (state) => {
       state.isCartOpen = !state.isCartOpen;
@@ -61,7 +61,7 @@ export const cartSlice = createSlice({
         }
         return item;
       });
-      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalPrice = Number(calculateTotalPrice(state.cart).toFixed(2));
     },
     decreaseCount: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.map((item) => {
@@ -70,7 +70,7 @@ export const cartSlice = createSlice({
         }
         return item;
       });
-      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalPrice = Number(calculateTotalPrice(state.cart).toFixed(2));
     },
     resetCart: (state) => {
       state.cart = [];

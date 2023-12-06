@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { resetCart } from "../redux/features/cartSlice";
 import { loadStripe } from "@stripe/stripe-js";
 import { FormValues } from "../types/typing";
 import { FormikHelpers } from "formik";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 function useStripePayment() {
+  const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.reducers.cartSlice);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -65,6 +67,7 @@ function useStripePayment() {
         setErrorMessage(session.message);
         return;
       }
+      dispatch(resetCart());
       await stripe.redirectToCheckout({
         sessionId: session.id,
       });

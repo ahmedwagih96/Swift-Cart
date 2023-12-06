@@ -3,9 +3,9 @@ import useScrollToTop from "./hooks/useScrollToTop";
 import { Routes, Route, Navigate } from "react-router-dom";
 const Home = lazy(() => import("./pages/Home"));
 const Checkout = lazy(() => import("./pages/Checkout"));
-const Confirmation = lazy(() => import("./pages/Confirmation"));
+const Fulfilled = lazy(() => import("./pages/Fulfilled"));
 const ItemDetails = lazy(() => import("./pages/ItemDetails"));
-const Cancellation = lazy(() => import("./pages/Cancellation"));
+const Declined = lazy(() => import("./pages/Declined"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 import { CartMenu, Footer, Header, LoadingSpinner } from "./components";
@@ -27,12 +27,12 @@ function App() {
             element={user ? <Checkout /> : <Navigate to="/" />}
           />
           <Route
-            path="checkout/success"
-            element={user ? <Confirmation /> : <Navigate to="/" />}
+            path="checkout/fulfilled/:orderToken"
+            element={user ? <Fulfilled /> : <Navigate to="/" />}
           />
           <Route
-            path="checkout/failure"
-            element={user ? <Cancellation /> : <Navigate to="/" />}
+            path="checkout/declined/:orderToken"
+            element={user ? <Declined /> : <Navigate to="/" />}
           />
           <Route
             path="/login"

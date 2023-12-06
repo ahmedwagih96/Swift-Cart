@@ -1,11 +1,13 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { Item } = require('../models/item.model.js');
 const { Order } = require("../models/order.model.js");
+const { OrderToken } = require("../models/orderToken.model.js")
+const crypto = require('crypto');
 /**-----------------------------------------------------
     * @desc Make Payment
     * @route /api/api/order
     * @method POST
-    * @access public
+    * @access private (only logged in users)
 -----------------------------------------------------*/
 const makeOrder = async (req, res) => {
     // retrieve item information 
@@ -31,23 +33,78 @@ const makeOrder = async (req, res) => {
             item: _id
         }
     })
+
+    // Create Order Token 
+    const orderToken = new OrderToken({
+        user: req.user.id,
+        token: crypto.randomBytes(32).toString("hex")
+    })
+
+    await orderToken.save()
+
     // create a stripe session
     const session = await stripe.checkout.sessions.create({
         customer_email: req.body.email,
         payment_method_types: ['card'],
         mode: 'payment',
         line_items: items,
-        success_url: `${process.env.CLIENT_DOMAIN}/checkout/success`,
-        cancel_url: `${process.env.CLIENT_DOMAIN}/checkout/failure`
+        success_url: `${process.env.CLIENT_DOMAIN}/checkout/fulfilled/${orderToken.token}`,
+        cancel_url: `${process.env.CLIENT_DOMAIN}/checkout/declined/${orderToken.token}`
     }).catch(() => {
         return res.status(400).json({ message: 'There was a problem making your payment' })
     })
     await Order.create({
-        products, stripeSessionId: session.id, user: req.user.id
-
+        products, stripeSessionId: session.id, user: req.user.id, status: 'pending'
     })
     return res.status(200).json({ id: session.id });
-
 }
 
-module.exports = { makeOrder }
+
+/**-----------------------------------------------------
+    * @desc Make Payment
+    * @route /api/api/stripe/webhook
+    * @method POST
+    * @access private
+-----------------------------------------------------*/
+const handleStripeEvents = async (request, response) => {
+    const sig = request.headers['stripe-signature'];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
+    } catch (err) {
+        response.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+    }
+    // Handle the event
+    switch (event.type) {
+        case 'checkout.session.completed':
+            const completedSession = event.data.object;
+            await Order.findOneAndUpdate(
+                { stripeSessionId: completedSession.id },
+                { status: 'fulfilled' },
+                { new: true }
+            );
+            break;
+
+        case 'checkout.session.payment_failed':
+            const failedSession = event.data.object;
+            await Order.findOneAndUpdate(
+                { stripeSessionId: failedSession.id },
+                { status: 'cancelled' },
+                { new: true }
+            );
+            break;
+
+        default:
+            response.status(400).end();
+            return;
+    }
+
+    response.status(200).end();
+}
+
+
+
+module.exports = { makeOrder, handleStripeEvents }
