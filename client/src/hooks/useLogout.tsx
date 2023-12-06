@@ -7,9 +7,12 @@ function useLogout() {
   const signOutUser = async () => {
     try {
       setError(false);
-      const res = await fetch("http://localhost:8000/api/auth/signout", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/auth/signout`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (!data.success) {
         setError(true);
