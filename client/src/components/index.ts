@@ -10,6 +10,9 @@ import CartItem from "./CartMenu/CartItem";
 // HOME PAGE
 import ShoppingList from "./Home/ShoppingList";
 import Subscribe from "./Home/Subscribe";
+// ORDER PAGE
+import OrderItem from "./Orders/OrderItem";
+import OrderItemProduct from "./Orders/OrderItemProduct";
 // ITEM DETAILS PAGE
 import ItemDescriptions from "./ItemDetails/ItemDescriptions";
 import ItemInformation from "./ItemDetails/ItemInformation";
@@ -45,5 +48,7 @@ export {
   Error,
   Seo,
   LoadingSpinner,
-  ErrorToast
+  ErrorToast,
+  OrderItem,
+  OrderItemProduct
 };
