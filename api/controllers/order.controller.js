@@ -111,7 +111,7 @@ const handleStripeEvents = async (request, response) => {
     * @access private (only logged in user)
 -----------------------------------------------------*/
 const getAllOrders = async (req, res) => {
-    const orders = await Order.find({}).populate({
+    const orders = await Order.find({ user: req.user.id }).populate({
         path: 'products.item',
         model: 'Item',
     });
