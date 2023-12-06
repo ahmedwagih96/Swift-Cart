@@ -15,7 +15,7 @@ const signup = async (req, res) => {
     const newUser = new User({ username, email, password: hashedPassword })
     await newUser.save();
 
-    const user = await User.findOne({ email }).select("-password").populate("orders");
+    const user = await User.findOne({ email }).select("-password")
     // generate the token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
@@ -39,7 +39,7 @@ const signin = async (req, res) => {
     // generate the token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    user = await User.findOne({ email }).select("-password").populate("orders");
+    user = await User.findOne({ email }).select("-password")
     // response to client
     res.cookie("access_token", token, {
         withCredentials: true,
