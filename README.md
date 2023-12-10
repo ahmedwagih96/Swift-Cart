@@ -46,7 +46,7 @@ The root project has `client` and `api` folders.
 
 ## Setup
 - **Clone the Repository:**
-	- git clone git@github.com:ahmedwagih96/property-pulse.git
+	- git clone git@github.com:ahmedwagih96/Swift-Cart.git
 
 - **Install Backend Dependencies and run the server:**
 	- yarn install.
