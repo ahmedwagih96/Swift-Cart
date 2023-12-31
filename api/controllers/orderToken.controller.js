@@ -1,10 +1,10 @@
 const { OrderToken } = require("../models/orderToken.model.js")
 const verifyOrderToken = async (req, res) => {
     const { orderToken } = req.params;
-    const { id } = req.user;
+    const { userId } = req.user;
 
     const token = await OrderToken.findOne({
-        user: id,
+        user: userId,
         token: orderToken
     })
 
@@ -13,7 +13,7 @@ const verifyOrderToken = async (req, res) => {
     }
 
     await OrderToken.findByIdAndDelete(token._id)
-    res.status(200).json({ success: 'Valid Link' })
+    return res.status(200).json({ success: 'Valid Link' })
 }
 
 module.exports = { verifyOrderToken }

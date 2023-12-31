@@ -36,7 +36,7 @@ const makeOrder = async (req, res) => {
 
     // Create Order Token 
     const orderToken = new OrderToken({
-        user: req.user.id,
+        user: req.user.userId,
         token: crypto.randomBytes(32).toString("hex")
     })
 
@@ -54,7 +54,7 @@ const makeOrder = async (req, res) => {
         return res.status(400).json({ message: 'There was a problem making your payment' })
     })
     await Order.create({
-        products, stripeSessionId: session.id, user: req.user.id, status: 'pending', totalPrice: req.body.totalPrice
+        products, stripeSessionId: session.id, user: req.user.userId, status: 'pending', totalPrice: req.body.totalPrice
     })
     return res.status(200).json({ id: session.id });
 }
@@ -111,11 +111,11 @@ const handleStripeEvents = async (request, response) => {
     * @access private (only logged in user)
 -----------------------------------------------------*/
 const getAllOrders = async (req, res) => {
-    const orders = await Order.find({ user: req.user.id }).populate({
+    const orders = await Order.find({ user: req.user.userId }).populate({
         path: 'products.item',
         model: 'Item',
     });
-    res.status(200).json(orders)
+    return res.status(200).json(orders)
 }
 
 

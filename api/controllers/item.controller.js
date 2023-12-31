@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require("path");
 const { Item, validateCreateItem } = require('../models/item.model.js')
 const { cloudinaryUploadImage } = require('../utils/cloudinary');
 /**-----------------------------------------------------
@@ -14,7 +12,7 @@ const getAllItems = async (req, res) => {
         queries.category = req.query.category
     }
     const items = await Item.find(queries)
-    res.status(200).json(items)
+    return res.status(200).json(items)
 }
 
 /**-----------------------------------------------------
@@ -49,10 +47,7 @@ const createItem = async (req, res) => {
     }
 
     // Upload Photo
-    const imagePath = path.join(__dirname, `../images/${req.file.filename}`)
-    const result = await cloudinaryUploadImage(imagePath);
-    // Remove Image from the Server
-    fs.unlinkSync(imagePath)
+    const result = await cloudinaryUploadImage(req.file.path);
 
     await Item.create({
         ...req.body,
@@ -60,7 +55,7 @@ const createItem = async (req, res) => {
     })
 
     // Send Response to the client
-    res.status(201).json({ message: 'New Item Created' });
+    return res.status(201).json({ message: 'New Item Created' });
 
 
 }

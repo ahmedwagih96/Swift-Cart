@@ -1,7 +1,8 @@
 const { User } = require('../models/user.model.js');
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
+const RefreshToken = require('../models/refreshToken.model.js');
+const { createAccessToken, createRefreshToken } = require('../utils/tokens.js');
 
 const signup = async (req, res) => {
     const { username, email, password } = req.body;
@@ -15,19 +16,26 @@ const signup = async (req, res) => {
     const newUser = new User({ username, email, password: hashedPassword })
     await newUser.save();
 
-    const user = await User.findOne({ email }).select("-password")
+    const user = await User.findOne({ email })
+    // Create Access and Refresh Tokens 
+    const refreshToken = new RefreshToken({ userId: user._id });
+    await refreshToken.save()
+
     // generate the token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const access_token = createAccessToken(user._id);
+    const refresh_token = createRefreshToken(user._id, refreshToken._id);
+
 
     // response to client
-    res.cookie('access_token', token, { httpOnly: true }).status(201).json({ message: 'Signed Up Successfully', user, success: true });
+    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+    return res.status(200).json({ message: 'Signed Up Successfully', user, success: true, access_token })
 }
 
 
 const signin = async (req, res) => {
     const { email, password } = req.body;
     // Check if user exists
-    let user = await User.findOne({ email })
+    let user = await User.findOne({ email }).select("+password")
     if (!user) {
         return res.status(404).json({ message: `Wrong Credentials`, success: false })
     }
@@ -36,22 +44,44 @@ const signin = async (req, res) => {
     if (!isValidPassword) {
         return res.status(401).json({ message: `Wrong Credentials`, success: false })
     }
+
+    user = await User.findOne({ email })
+
+    // Create Access and Refresh Tokens 
+    const refreshToken = new RefreshToken({ userId: user._id });
+    await refreshToken.save()
+
     // generate the token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const access_token = createAccessToken(user._id);
+    const refresh_token = createRefreshToken(user._id, refreshToken._id);
 
-    user = await User.findOne({ email }).select("-password")
     // response to client
-    res.cookie("access_token", token, {
-        withCredentials: true,
-        httpOnly: false,
-    });
-    res.status(200).json({ message: 'Signed In Successfully', user, success: true })
-
+    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+    return res.status(200).json({ message: 'Signed Up Successfully', user, success: true, access_token })
 }
 
 
 const signout = async (req, res) => {
-    res.clearCookie('access_token');
-    res.status(200).json({ message: 'User has been Signed Out', success: true })
+    const currentRefreshToken = req.decodedToken
+    await RefreshToken.deleteOne({ _id: currentRefreshToken.tokenId })
+
+    return res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true }).status(200)
+        .json({ success: true, message: 'User logged out successfully' })
 }
-module.exports = { signup, signin, signout }
+
+const refreshToken = async (req, res) => {
+    const currentRefreshToken = req.decodedToken
+    const newRefreshToken = new RefreshToken({ userId: currentRefreshToken.userId });
+    await newRefreshToken.save();
+    await RefreshToken.deleteOne({ _id: currentRefreshToken.tokenId })
+
+    // generate the token
+    const access_token = createAccessToken(currentRefreshToken.userId);
+    const refresh_token = createRefreshToken(currentRefreshToken.userId, newRefreshToken._id);
+
+    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+    return res.json({ access_token, success: true })
+}
+
+
+module.exports = { signup, signin, signout, refreshToken }
