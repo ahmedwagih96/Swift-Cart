@@ -10,8 +10,13 @@ import useRegister from "../hooks/useRegister";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 function Register() {
-  const { handleFormSubmit, loading, error, errorMessage, setError } =
-    useRegister();
+  const {
+    handleFormSubmit,
+    isLoading: loading,
+    errorMessage,
+    isError,
+    reset,
+  } = useRegister();
 
   return (
     <main>
@@ -20,11 +25,7 @@ function Register() {
         title="Register"
         description="Create your Swift Cart account to unlock a world of fashion possibilities. Register today for a tailored shopping experience that suits your unique style."
       />
-      <ErrorToast
-        error={error}
-        errorMessage={errorMessage}
-        setError={setError}
-      />
+      <ErrorToast error={isError} errorMessage={errorMessage} setError={reset} />
       <Typography variant="h3" textAlign="center" marginTop="50px">
         Register New Account
       </Typography>
@@ -114,7 +115,7 @@ function Register() {
                   width: "fit-content",
                 }}
               >
-                {loading ? <CircularProgress size={22}/> : "Register"}
+                {loading ? <CircularProgress size={22} /> : "Register"}
               </Button>
             </form>
           )}

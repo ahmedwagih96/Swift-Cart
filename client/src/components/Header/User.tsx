@@ -11,7 +11,7 @@ import { ErrorToast } from "..";
 import { Link } from "react-router-dom";
 export default function User() {
   const { user } = useAppSelector((state) => state.reducers.userSlice);
-  const { error, signOutUser, setError } = useLogout();
+  const { isError, signOutUser, reset } = useLogout();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,7 +22,7 @@ export default function User() {
   };
   return (
     <>
-      <ErrorToast error={error} setError={setError} />
+      <ErrorToast error={isError} setError={reset} />
       <React.Fragment>
         <IconButton
           onClick={handleClick}

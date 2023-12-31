@@ -4,19 +4,20 @@ import { resetCart } from "../redux/features/cartSlice";
 import { loadStripe } from "@stripe/stripe-js";
 import { FormValues } from "../types/typing";
 import { FormikHelpers } from "formik";
+import { useMakeOrderPaymentMutation } from "../redux/services/orderApi";
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
+
 function useStripePayment() {
   const dispatch = useAppDispatch();
   const { cart, totalPrice } = useAppSelector(
     (state) => state.reducers.cartSlice
   );
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [makeStripePayment, { isError, error, isLoading, reset }] =
+    useMakeOrderPaymentMutation();
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
-
   const handleFormSubmit = async (
     values: FormValues,
     actions: FormikHelpers<FormValues>
@@ -37,6 +38,7 @@ function useStripePayment() {
   async function makePayment(values: FormValues) {
     const stripe = await stripePromise;
     if (!stripe) return;
+
     const requestBody = {
       userName: [
         values.billingAddress.firstName,
@@ -50,48 +52,29 @@ function useStripePayment() {
       })),
     };
 
-    try {
-      setLoading(true);
-      setError(false);
-      setErrorMessage("");
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/orders`,
-        {
-          credentials: "include",
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestBody),
-        }
-      );
-      const session = await response.json();
-      setLoading(false);
-      if (session.message) {
-        setError(true);
-        setErrorMessage(session.message);
-        return;
-      }
+    const result = await makeStripePayment(requestBody);
+    if ('data' in result && result.data?.id) {
       dispatch(resetCart());
-      await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-    } catch (error) {
-      setLoading(false);
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
-        setError(true);
-      }
+      await stripe.redirectToCheckout({ sessionId: result.data.id });
     }
   }
+
+  let errorMessage: string = "";
+  if (isError && error) {
+    const typedError = error as { status: number; data: { message: string } };
+    errorMessage = typedError.data.message;
+  }
+
   return {
     handleFormSubmit,
     setActiveStep,
     activeStep,
     isFirstStep,
     isSecondStep,
-    loading,
-    error,
+    isError,
+    isLoading,
     errorMessage,
-    setError,
+    reset,
   };
 }
 

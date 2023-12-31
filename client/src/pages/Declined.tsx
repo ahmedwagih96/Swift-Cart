@@ -1,16 +1,17 @@
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import { Alert, AlertTitle, Typography } from "@mui/material";
 import { LoadingSpinner, Seo } from "../components";
-import useFetchOrderToken from "../hooks/useFetchOrderToken";
-import { Typography } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useFetchOrderTokenQuery } from "../redux/services/orderApi";
 const Declined = () => {
-  const { loading, error } = useFetchOrderToken();
-
+  const { orderToken } = useParams();
+  const { isError, isLoading: loading } = useFetchOrderTokenQuery({
+    orderToken,
+  });
   if (loading) return <LoadingSpinner />;
   return (
     <main style={{ margin: "90px auto", width: "80%" }}>
       <Seo title="Declined Payment" />
-      {error ? (
+      {isError ? (
         <Typography variant="h2" fontWeight="bold" mb="15px">
           Invalid Link
         </Typography>

@@ -10,8 +10,14 @@ import useLogin from "../hooks/useLogin";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 function Login() {
-  const { handleFormSubmit, loading, error, errorMessage, setError } =
-    useLogin();
+  const {
+    handleFormSubmit,
+    isLoading: loading,
+    isError,
+    reset,
+    errorMessage,
+  } = useLogin();
+
   return (
     <main>
       <Seo
@@ -20,8 +26,8 @@ function Login() {
         description="Sign in to Swift Cart and experience seamless access to your personalized wardrobe. Explore the latest fashion trends, manage your orders, and stay updated on exclusive offers."
       />
       <ErrorToast
-        error={error}
-        setError={setError}
+        error={isError}
+        setError={reset}
         errorMessage={errorMessage}
       />
       <Typography variant="h3" textAlign="center" marginTop="50px">

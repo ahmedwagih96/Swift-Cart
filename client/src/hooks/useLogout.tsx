@@ -1,32 +1,17 @@
-import { useState } from "react";
 import { logoutUser } from "../redux/features/userSlice";
 import { useAppDispatch } from "../redux/hooks";
+import { useLogoutMutation } from "../redux/services/authApi";
 function useLogout() {
+  const [signOut, { isSuccess, isError, reset }] = useLogoutMutation();
   const dispatch = useAppDispatch();
-  const [error, setError] = useState<boolean>(false);
+  if (isSuccess) {
+    dispatch(logoutUser());
+  }
   const signOutUser = async () => {
-    try {
-      setError(false);
-      const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/auth/signout`,
-        {
-          credentials: "include",
-        }
-      );
-      const data = await res.json();
-      if (!data.success) {
-        setError(true);
-      }
-      if (data.success) {
-        dispatch(logoutUser());
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(true);
-      }
-    }
+    signOut();
   };
-  return { signOutUser, error, setError };
+
+  return { signOutUser, reset, isError };
 }
 
 export default useLogout;

@@ -1,16 +1,18 @@
 import { Alert, AlertTitle, Typography } from "@mui/material";
 import { LoadingSpinner, Seo } from "../components";
-import useFetchOrderToken from "../hooks/useFetchOrderToken";
-
+import { useParams } from "react-router-dom";
+import { useFetchOrderTokenQuery } from "../redux/services/orderApi";
 const Fulfilled = () => {
-  const { loading, error } = useFetchOrderToken();
-
+  const { orderToken } = useParams();
+  const { isError, isLoading: loading } = useFetchOrderTokenQuery({
+    orderToken,
+  });
   if (loading) return <LoadingSpinner />;
 
   return (
     <main style={{ margin: "90px auto", width: "80%" }}>
       <Seo title="Fulfilled" />
-      {error ? (
+      {isError ? (
         <Typography variant="h2" fontWeight="bold" mb="15px">
           Invalid Link
         </Typography>

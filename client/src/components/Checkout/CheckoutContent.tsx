@@ -14,17 +14,17 @@ function CheckoutContent({ cart }: { cart: ItemType[] }) {
     activeStep,
     isFirstStep,
     isSecondStep,
-    loading,
-    error,
+    isLoading: loading,
+    isError,
     errorMessage,
-    setError,
+    reset,
   } = useStripePayment();
   return (
     <>
       <ErrorToast
-        error={error}
+        error={isError}
         errorMessage={errorMessage}
-        setError={setError}
+        setError={reset}
       />
       <Stepper activeStep={activeStep} />
       <div>

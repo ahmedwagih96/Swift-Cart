@@ -29,3 +29,13 @@ export interface RegisterValues extends LoginValues {
   username: string;
   confirmPassword: string;
 }
+
+export interface CartOrder {
+  userName: string;
+  email: string;
+  totalPrice: number;
+  products: { _id: string; count: number | undefined }[];
+}
+export interface MakeOrderPaymentResponse {
+  id: string;
+}
