@@ -6,7 +6,7 @@ const path = require('path');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const express = require('express');
-const { errorHandler } = require('./middleware/error.js');
+const { ErrorHandlerMiddleware, NotFoundMiddleware } = require('./middleware');
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -34,11 +34,13 @@ app.use('/api/items', require('./routes/item.route.js'));
 app.use('/api/auth', require('./routes/auth.route.js'));
 app.use('/api/orderToken', require('./routes/orderToken.route.js'));
 
+// Use Error and Not Found Middleware
+app.use(ErrorHandlerMiddleware);
+app.use(NotFoundMiddleware);
+
+
 const staticPath = path.join(__dirname, '../client/dist');
 app.use(express.static(staticPath));
-
-// Error Handler Middleware
-app.use(errorHandler);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(staticPath, 'index.html'));

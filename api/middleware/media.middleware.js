@@ -1,17 +1,14 @@
 const multer = require("multer");
 
 // Photo Storage
-
-
 const photoStorage = multer.diskStorage({
-    filename: function (req,file,cb) {
-      cb(null, file.originalname)
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
     }
-  });
+});
 
 // Photo Upload Middleware 
-
-const photoUpload = multer({
+const MediaHandlerMiddleware = multer({
     storage: photoStorage,
     fileFilter: function (req, file, cb) {
         if (file.mimetype.startsWith("image")) {
@@ -24,4 +21,4 @@ const photoUpload = multer({
 })
 
 
-module.exports = { photoUpload }
+module.exports = MediaHandlerMiddleware

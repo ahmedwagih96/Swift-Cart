@@ -1,10 +1,8 @@
 const router = require('express').Router();
 const { getAllItems, getItemById, createItem } = require('../controllers/item.controller.js');
-const { photoUpload } = require('../middleware/mediaHandling.js');
-const { validateId } = require('../middleware/validateObjectId.js')
+const { ValidateObjectIdMiddleware, MediaHandlerMiddleware } = require('../middleware')
 
-
-router.route('/').get(getAllItems).post(photoUpload.single("image"), createItem);
-router.get('/:id', validateId, getItemById);
+router.route('/').get(getAllItems).post(MediaHandlerMiddleware.single("image"), createItem);
+router.get('/:id', ValidateObjectIdMiddleware, getItemById);
 
 module.exports = router

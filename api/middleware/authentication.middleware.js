@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const RefreshToken = require('../models/refreshToken.model.js');
 
-const verifyToken = (req, res, next) => {
+const VerifyTokenMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: 'Access denied' })
@@ -17,8 +17,8 @@ const verifyToken = (req, res, next) => {
 }
 
 // Verify Token & User 
-function verifyTokenAndUser(req, res, next) {
-    verifyToken(req, res, () => {
+function VerifyTokenAndUserMiddleware(req, res, next) {
+    VerifyTokenMiddleware(req, res, () => {
         if (req.user.userId === req.params.userId) {
             next();
         } else {
@@ -27,7 +27,7 @@ function verifyTokenAndUser(req, res, next) {
     })
 }
 
-async function verifyRefreshToken(req, res, next) {
+async function VerifyRefreshTokenMiddleware(req, res, next) {
     const token = req.cookies.jwt
     if (!token) {
         return res.status(401).json({ message: 'Access denied' })
@@ -37,6 +37,7 @@ async function verifyRefreshToken(req, res, next) {
             return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
         } catch (error) {
             return res.status(401).json({ message: 'Access denied' })
+
         }
     }
     const decodedToken = decodeToken(token);
@@ -51,4 +52,4 @@ async function verifyRefreshToken(req, res, next) {
 
 
 
-module.exports = { verifyToken, verifyTokenAndUser, verifyRefreshToken }
+module.exports = { VerifyTokenMiddleware, VerifyTokenAndUserMiddleware, VerifyRefreshTokenMiddleware }
