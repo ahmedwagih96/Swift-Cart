@@ -1,4 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { NotFoundError, BadRequestError } = require("../errors");
 const { Item } = require('../models/item.model.js');
 const { Order } = require("../models/order.model.js");
 const { OrderToken } = require("../models/orderToken.model.js")
@@ -14,7 +15,7 @@ const makeOrder = async (req, res) => {
     const items = await Promise.all(req.body.products.map(async ({ count, _id }) => {
         const item = await Item.findById(_id);
         if (!item) {
-            return res.status(404).json({ message: `Item with ID:${_id} was not found` })
+            throw new NotFoundError(`Item with ID:${_id} was not found`)
         }
         return {
             price_data: {
@@ -51,7 +52,7 @@ const makeOrder = async (req, res) => {
         success_url: `${process.env.CLIENT_DOMAIN}/checkout/fulfilled/${orderToken.token}`,
         cancel_url: `${process.env.CLIENT_DOMAIN}/checkout/declined/${orderToken.token}`
     }).catch(() => {
-        return res.status(400).json({ message: 'There was a problem making your payment' })
+        throw new BadRequestError('There was a problem making your payment')
     })
     await Order.create({
         products, stripeSessionId: session.id, user: req.user.userId, status: 'pending', totalPrice: req.body.totalPrice
@@ -74,8 +75,7 @@ const handleStripeEvents = async (request, response) => {
     try {
         event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
     } catch (err) {
-        response.status(400).send(`Webhook Error: ${err.message}`);
-        return;
+        throw new BadRequestError(`Webhook Error: ${err.message}`)
     }
     // Handle the event
     switch (event.type) {
@@ -101,7 +101,6 @@ const handleStripeEvents = async (request, response) => {
             response.status(400).end();
             return;
     }
-
     response.status(200).end();
 }
 /**-----------------------------------------------------

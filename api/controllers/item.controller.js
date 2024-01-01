@@ -1,3 +1,4 @@
+const { NotFoundError, BadRequestError } = require('../errors');
 const { Item, validateCreateItem } = require('../models/item.model.js')
 const { cloudinaryUploadImage } = require('../utils/cloudinary');
 /**-----------------------------------------------------
@@ -25,7 +26,7 @@ const getAllItems = async (req, res) => {
 const getItemById = async (req, res) => {
     const item = await Item.findById(req.params.id);
     if (!item) {
-        return res.status(404).json({ message: 'item not found' })
+        throw new NotFoundError('Item Not Found')
     }
     return res.status(200).json(item)
 }
@@ -39,11 +40,11 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res) => {
     // Validation
     if (!req.file) {
-        return res.status(400).json({ message: "no image is provided" })
+        new BadRequestError("no image is provided")
     }
     const { error } = validateCreateItem(req.body);
     if (error) {
-        return res.status(400).json({ message: error.details[0].message })
+        new BadRequestError(error.details[0].message)
     }
 
     // Upload Photo

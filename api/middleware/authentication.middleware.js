@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
 const RefreshToken = require('../models/refreshToken.model.js');
+const { UnauthorizedError, UnauthenticatedError } = require('../errors');
 
 const VerifyTokenMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: 'Access denied' })
+        throw new UnauthenticatedError("Access Denied")
     }
     const access_token = authHeader.split(" ")[1];
     try {
@@ -12,7 +13,7 @@ const VerifyTokenMiddleware = (req, res, next) => {
         req.user = payload
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Access denied' })
+        throw new UnauthenticatedError("Access Denied")
     }
 }
 
@@ -22,7 +23,7 @@ function VerifyTokenAndUserMiddleware(req, res, next) {
         if (req.user.userId === req.params.userId) {
             next();
         } else {
-            return res.status(403).json({ message: 'Access denied' })
+            throw new UnauthorizedError("Access Denied")
         }
     })
 }
@@ -30,13 +31,13 @@ function VerifyTokenAndUserMiddleware(req, res, next) {
 async function VerifyRefreshTokenMiddleware(req, res, next) {
     const token = req.cookies.jwt
     if (!token) {
-        return res.status(401).json({ message: 'Access denied' })
+        throw new UnauthenticatedError("Access Denied")
     }
     const decodeToken = (token) => {
         try {
             return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
         } catch (error) {
-            return res.status(401).json({ message: 'Access denied' })
+            throw new UnauthenticatedError("Access Denied")
 
         }
     }
@@ -46,7 +47,7 @@ async function VerifyRefreshTokenMiddleware(req, res, next) {
         req.decodedToken = decodedToken;
         next()
     } else {
-        return res.status(401).json({ message: 'Access denied' })
+        throw new UnauthenticatedError("Access Denied")
     }
 }
 

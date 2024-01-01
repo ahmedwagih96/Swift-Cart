@@ -3,13 +3,14 @@ const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const RefreshToken = require('../models/refreshToken.model.js');
 const { createAccessToken, createRefreshToken } = require('../utils/tokens.js');
+const { ConflictError, UnauthenticatedError } = require('../errors');
 
 const signup = async (req, res) => {
     const { username, email, password } = req.body;
     // Check if the email is taken
     let isEmailTaken = await User.findOne({ email });
     if (isEmailTaken) {
-        return res.status(409).json({ message: `${email} is already used by another account`, success: false })
+        throw new ConflictError(`${email} is already used by another account`)
     }
     // hash the password
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -37,12 +38,12 @@ const signin = async (req, res) => {
     // Check if user exists
     let user = await User.findOne({ email }).select("+password")
     if (!user) {
-        return res.status(404).json({ message: `Wrong Credentials`, success: false })
+        throw new UnauthenticatedError('Wrong Credentials')
     }
     // validate the password
     const isValidPassword = bcryptjs.compareSync(password, user.password);
     if (!isValidPassword) {
-        return res.status(401).json({ message: `Wrong Credentials`, success: false })
+        throw new UnauthenticatedError('Wrong Credentials')
     }
 
     user = await User.findOne({ email })

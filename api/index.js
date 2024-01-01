@@ -35,8 +35,8 @@ app.use('/api/auth', require('./routes/auth.route.js'));
 app.use('/api/orderToken', require('./routes/orderToken.route.js'));
 
 // Use Error and Not Found Middleware
-app.use(ErrorHandlerMiddleware);
 app.use(NotFoundMiddleware);
+app.use(ErrorHandlerMiddleware);
 
 
 const staticPath = path.join(__dirname, '../client/dist');

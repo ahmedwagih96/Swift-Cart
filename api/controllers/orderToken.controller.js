@@ -1,3 +1,4 @@
+const { BadRequestError } = require("../errors");
 const { OrderToken } = require("../models/orderToken.model.js")
 const verifyOrderToken = async (req, res) => {
     const { orderToken } = req.params;
@@ -9,7 +10,7 @@ const verifyOrderToken = async (req, res) => {
     })
 
     if (!token) {
-        return res.status(400).json({ error: 'Invalid link' });
+        throw new BadRequestError("Invalid Link")
     }
 
     await OrderToken.findByIdAndDelete(token._id)
